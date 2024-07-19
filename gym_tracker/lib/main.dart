@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/auth/login_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
+import './screens/auth/login_screen.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+void main() {
   runApp(MyApp());
 }
 
@@ -14,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Gym Tracker',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
       home: const LoginScreen(),
     );

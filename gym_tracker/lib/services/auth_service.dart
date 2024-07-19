@@ -1,53 +1,74 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:sqflite/sqflite.dart';
+import 'database_service.dart';
+import '../models/user.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final DatabaseService _databaseService = DatabaseService();
 
-  // Register user with email and password
-  Future<User?> registerWithEmailAndPassword(
-      String email, String password, String username) async {
-    try {
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      User? user = result.user;
-      await user?.updateDisplayName(username);
-      return user;
-    } catch (e) {
-      rethrow;
-    }
+  // Helper function to hash passwords
+  String _hashPassword(String password) {
+    final bytes = utf8.encode(password);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 
-  // Sign in user with email and password
-  Future<User?> signInWithEmailAndPassword(
-      String email, String password) async {
-    try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return result.user;
-    } catch (e) {
-      rethrow;
+  // Register a new user
+  Future<bool> registerUser(String email, String password) async {
+    final db = await _databaseService.database;
+
+    // Check if the user already exists
+    List<Map> result =
+        await db.query('users', where: 'email = ?', whereArgs: [email]);
+    if (result.isNotEmpty) {
+      print('user already exists');
+      return false; // User already exists
     }
+
+    // Hash the password before storing it
+    String hashedPassword = _hashPassword(password);
+
+    // Insert new user
+    User newUser = User(email: email, password: hashedPassword);
+    await db.insert('users', newUser.toMap());
+    print(newUser);
+    return true;
   }
 
-  // Sign out the current user
-  Future<void> signOut() async {
-    try {
-      return await _auth.signOut();
-    } catch (e) {
-      rethrow;
-    }
+  // Login a user
+  Future<bool> loginUser(String email, String password) async {
+    final db = await _databaseService.database;
+
+    // Hash the provided password
+    String hashedPassword = _hashPassword(password);
+
+    List<Map> users = await db.query('users');
+    print(users);
+    // Check if the user exists and the password matches
+    List<Map> result = await db.query(
+      'users',
+      where: 'email =? AND password =?',
+      whereArgs: [email, hashedPassword],
+    );
+
+    return result.isNotEmpty;
   }
 
-  // Get the currently signed-in user
-  User? getCurrentUser() {
-    try {
-      return _auth.currentUser;
-    } catch (e) {
-      rethrow;
+  // Fetch a user by email
+  Future<User?> getUserByEmail(String email) async {
+    final db = await _databaseService.database;
+
+    List<Map> result =
+        await db.query('users', where: 'email = ?', whereArgs: [email]);
+
+    if (result.isNotEmpty) {
+      return User.fromMap(result.first.cast<String, dynamic>());
     }
+    return null;
+  }
+
+  Future<void> logoutUser() async {
+    // mara jaya
   }
 }
