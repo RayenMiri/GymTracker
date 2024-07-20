@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'database_service.dart';
 import '../models/user.dart';
 
@@ -14,6 +15,15 @@ class AuthService {
     return digest.toString();
   }
 
+  // token generation function
+  String _generateToken(String email) {
+    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    final tokenString = '$email:$timestamp';
+    final bytes = utf8.encode(tokenString);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
   // Register a new user
   Future<bool> registerUser(String email, String password) async {
     final db = await _databaseService.database;
@@ -22,17 +32,21 @@ class AuthService {
     List<Map> result =
         await db.query('users', where: 'email = ?', whereArgs: [email]);
     if (result.isNotEmpty) {
-      print('user already exists');
       return false; // User already exists
     }
 
     // Hash the password before storing it
     String hashedPassword = _hashPassword(password);
 
-    // Insert new user
-    User newUser = User(email: email, password: hashedPassword);
+    // Generate a unique token for the user
+    String token = _generateToken(email);
+
+    // Insert new user with the token
+    User newUser = User(email: email, password: hashedPassword, token: token);
     await db.insert('users', newUser.toMap());
-    print(newUser);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', newUser.token);
+
     return true;
   }
 
@@ -43,8 +57,6 @@ class AuthService {
     // Hash the provided password
     String hashedPassword = _hashPassword(password);
 
-    List<Map> users = await db.query('users');
-    print(users);
     // Check if the user exists and the password matches
     List<Map> result = await db.query(
       'users',
@@ -52,6 +64,8 @@ class AuthService {
       whereArgs: [email, hashedPassword],
     );
 
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', result.first['token']);
     return result.isNotEmpty;
   }
 
@@ -68,7 +82,16 @@ class AuthService {
     return null;
   }
 
+  //return the user token if he's logged in
+  Future<String?> getUserToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    return token;
+  }
+
+  //delete user token when logging out
   Future<void> logoutUser() async {
-    // mara jaya
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
   }
 }

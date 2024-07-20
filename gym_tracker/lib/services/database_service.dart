@@ -16,22 +16,25 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'gym_tracker.db');
 
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _onCreate,
-    );
+    return await openDatabase(path, version: 2, onCreate: _onCreate);
   }
+
+  /*Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < newVersion) {
+      await db.execute('DROP TABLE IF EXISTS users;');
+      await _onCreate(db, newVersion); // Recreate the users table
+    }
+  }*/
 
   // Create the database tables
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE users(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL
+        password TEXT NOT NULL,
+        token TEXT NOT NULL
       )
-      ''');
+    ''');
   }
 
   // Close the database (optional)
