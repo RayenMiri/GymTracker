@@ -25,7 +25,8 @@ class AuthService {
   }
 
   // Register a new user
-  Future<bool> registerUser(String email, String password) async {
+  Future<bool> registerUser(
+      String username, String email, String password) async {
     final db = await _databaseService.database;
 
     // Check if the user already exists
@@ -42,7 +43,11 @@ class AuthService {
     String token = _generateToken(email);
 
     // Insert new user with the token
-    User newUser = User(email: email, password: hashedPassword, token: token);
+    User newUser = User(
+        username: username,
+        email: email,
+        password: hashedPassword,
+        token: token);
     await db.insert('users', newUser.toMap());
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', newUser.token);

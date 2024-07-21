@@ -13,9 +13,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Gym Tracker',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
+      theme: ThemeData(fontFamily: 'Merriweather'),
+      darkTheme: ThemeData.dark(), // Dark theme
+      themeMode: ThemeMode.system,
       home: FutureBuilder(
         future: SharedPreferences.getInstance(),
         builder: (context, snapshot) {
