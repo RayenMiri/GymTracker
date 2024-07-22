@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_tracker/screens/Exercise/exercise_screen.dart';
 import '../models/plan.dart';
 import '../models/exercise.dart';
 
@@ -9,54 +10,70 @@ class ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              exercise.name,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              exercise.description,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
-            ),
-            SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Sets: ${exercise.sets}',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
+    return GestureDetector(
+      onTap: () => {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ExerciseScreen(exercise: exercise)))
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                exercise.name,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text(
-                  'Reps: ${exercise.reps}',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                exercise.description,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
                 ),
-              ],
-            ),
-            SizedBox(height: 8),
-            // Add an image or icon if you want to make it more visually appealing
-            // For example, you can use the following code to add an image
-            // Image.asset('assets/images/exercise.png', height: 100),
-          ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Weight:${exercise.weight}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    'Sets: ${exercise.sets}',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    'Reps: ${exercise.reps}',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    'Weight:${exercise.weight}',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              // Add an image or icon if you want to make it more visually appealing
+              // For example, you can use the following code to add an image
+              // Image.asset('assets/images/exercise.png', height: 100),
+            ],
+          ),
         ),
       ),
     );

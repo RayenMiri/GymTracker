@@ -3,11 +3,11 @@ class Exercise {
   final String description;
   final int sets;
   final int reps;
-
-  Exercise({
-    required this.name,
-    required this.description,
-    required this.sets,
-    required this.reps,
-  });
+  final double weight;
+  Exercise(
+      {required this.name,
+      required this.description,
+      required this.sets,
+      required this.reps,
+      required this.weight});
 }

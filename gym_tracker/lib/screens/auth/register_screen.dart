@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gym_tracker/screens/home/home_screen.dart';
 import 'package:gym_tracker/screens/settings/settings.dart';
+import 'package:gym_tracker/services/auth_service.dart';
 import 'package:gym_tracker/utils/colors_class.dart';
 import 'login_screen.dart'; // Assuming LoginScreen is in this file
 
@@ -18,6 +20,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _usernameController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  final AuthService _authService = AuthService();
+  String _errorMessage = '';
+
+  Future<void> handleRegister() async {
+    String email = _emailController.text;
+    String password = _passwordController.text;
+    String confirmPassword = _confirmPasswordController.text;
+    String username = _usernameController.text;
+
+    if (email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty ||
+        username.isEmpty) {
+      setState(() {
+        _errorMessage = 'All fields are required.';
+      });
+      return;
+    }
+
+    if (password != confirmPassword) {
+      setState(() {
+        _errorMessage = 'Passwords do not match.';
+      });
+      return;
+    }
+
+    bool result = await _authService.registerUser(username, email, password);
+    if (result) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    } else {
+      setState(() {
+        _errorMessage = 'Registration failed. Please try again.';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,18 +192,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 const Spacer(),
+                // Error message
+                if (_errorMessage.isNotEmpty)
+                  Text(
+                    _errorMessage,
+                    style: TextStyle(color: Colors.red),
+                  ),
+                SizedBox(height: media.width * 0.04),
                 // Register Button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
                       // Handle registration logic here
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SettingsScreen(),
-                        ),
-                      );
+                      handleRegister();
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),

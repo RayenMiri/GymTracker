@@ -68,18 +68,20 @@ class AuthService {
       where: 'email =? AND password =?',
       whereArgs: [email, hashedPassword],
     );
+    if (result.isEmpty) {
+      return false;
+    }
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('token', result.first['token']);
     return result.isNotEmpty;
   }
 
-  // Fetch a user by email
-  Future<User?> getUserByEmail(String email) async {
+  // Fetch a user by token
+  Future<User?> getUserByToken(String token) async {
     final db = await _databaseService.database;
-
     List<Map> result =
-        await db.query('users', where: 'email = ?', whereArgs: [email]);
+        await db.query('users', where: 'token = ?', whereArgs: [token]);
 
     if (result.isNotEmpty) {
       return User.fromMap(result.first.cast<String, dynamic>());

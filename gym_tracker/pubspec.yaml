@@ -86,7 +86,6 @@ flutter:
     - family: Poppins
       fonts:
         - asset: assets/font/Merriweather-Regular.ttf
-        - asset: assets/font/Merriweather-Medium.ttf
           weight: 500
         - asset: assets/font/Merriweather-Bold.ttf
           weight: 700

@@ -26,15 +26,41 @@ class DatabaseService {
     }
   }*/
 
-  // Create the database tables
   Future<void> _onCreate(Database db, int version) async {
+    // Create the users table
     await db.execute('''
-      CREATE TABLE users(
-        email TEXT UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        token TEXT NOT NULL
-      )
-    ''');
+    CREATE TABLE users(
+      userId INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+      token TEXT NOT NULL
+    );
+  ''');
+
+    // Create the plans table
+    await db.execute('''
+    CREATE TABLE plans(
+      planId INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId INTEGER NOT NULL,
+      planName TEXT NOT NULL,
+      description TEXT,
+      FOREIGN KEY (userId) REFERENCES users(userId) ON DELETE CASCADE
+    );
+  ''');
+
+    // Create the exercises table
+    await db.execute('''
+    CREATE TABLE exercises(
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      planId INTEGER NOT NULL,
+      exerciseName TEXT NOT NULL,
+      sets INTEGER NOT NULL,
+      reps INTEGER NOT NULL,
+      weight REAL,
+      FOREIGN KEY (planId) REFERENCES plans(planId) ON DELETE CASCADE
+    );
+  ''');
   }
 
   // Close the database (optional)
