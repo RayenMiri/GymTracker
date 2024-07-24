@@ -61,6 +61,20 @@ class DatabaseService {
       FOREIGN KEY (planId) REFERENCES plans(planId) ON DELETE CASCADE
     );
   ''');
+
+    //create the workout_progress table
+    await db.execute('''CREATE TABLE workout_progress (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER,
+    planId INTEGER,
+    date TEXT,
+    sets INTEGER,
+    reps INTEGER,
+    weight REAL,
+    FOREIGN KEY (userId) REFERENCES users(id),
+    FOREIGN KEY (planId) REFERENCES plans(id)
+    );
+  ''');
   }
 
   // Close the database (optional)

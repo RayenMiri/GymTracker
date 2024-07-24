@@ -63,14 +63,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Scaffold(
       backgroundColor: TColor.white(context),
-      body: SingleChildScrollView(
-        child: SafeArea(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Container(
-            height: media.height * 0.9,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: 10),
                 Text(
                   "Hello Gym Bro,",
                   style: TextStyle(color: TColor.gray(context), fontSize: 16),
@@ -81,6 +81,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       color: TColor.black(context),
                       fontSize: 20,
                       fontWeight: FontWeight.w700),
+                ),
+                Image.asset(
+                  'assets/img/on_1.png',
+                  width: media.width * 0.6,
                 ),
                 SizedBox(
                   height: media.width * 0.05,
@@ -191,7 +195,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-                const Spacer(),
+                SizedBox(
+                  height: media.width * 0.04,
+                ),
                 // Error message
                 if (_errorMessage.isNotEmpty)
                   Text(
@@ -203,10 +209,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Handle registration logic here
-                      handleRegister();
-                    },
+                    onPressed: handleRegister,
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       backgroundColor: Colors.blue,
@@ -323,15 +326,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       Text(
                         "Login",
                         style: TextStyle(
-                            color: TColor.black(context),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700),
+                          color: TColor.black(context),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: media.width * 0.04,
                 ),
               ],
             ),

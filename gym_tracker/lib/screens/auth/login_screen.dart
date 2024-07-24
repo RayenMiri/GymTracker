@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gym_tracker/screens/auth/register_screen.dart';
 import 'package:gym_tracker/screens/home/home_screen.dart';
 import 'package:gym_tracker/services/auth_service.dart';
 import 'package:gym_tracker/utils/colors_class.dart';
-import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -57,11 +57,11 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Container(
-            height: media.height * 0.9,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: 10),
                 Text(
                   "Hey Gym Bro,",
                   style: TextStyle(color: TColor.gray(context), fontSize: 16),
@@ -73,9 +73,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontSize: 20,
                       fontWeight: FontWeight.w700),
                 ),
-                SizedBox(
-                  height: media.width * 0.05,
+
+                Image.asset(
+                  'assets/img/on_2.png',
+                  width: media.width * 0.6,
                 ),
+                SizedBox(height: 20),
                 // Email field
                 TextField(
                   controller: _emailController,
@@ -130,6 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
+                SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -142,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                const Spacer(),
+                SizedBox(height: 20),
                 // Login Button
                 SizedBox(
                   width: double.infinity,
@@ -241,7 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 SizedBox(
-                  height: media.width * 0.04,
+                  height: media.width * 0.0089,
                 ),
                 // Register Button
                 TextButton(

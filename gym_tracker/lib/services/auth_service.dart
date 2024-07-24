@@ -80,6 +80,7 @@ class AuthService {
   // Fetch a user by token
   Future<User?> getUserByToken(String token) async {
     final db = await _databaseService.database;
+
     List<Map> result =
         await db.query('users', where: 'token = ?', whereArgs: [token]);
 
