@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (snapshot.connectionState == ConnectionState.done) {
           final List<Widget> _screens = [
             PlanScreen(),
-            ProgressScreen(userId: user?.userId ?? 0), // Use user?.userId here
+            ProgressScreen(userId: user?.userId ?? 0),
             NutritionScreen(),
             CommunityScreen(),
             SettingsScreen(),

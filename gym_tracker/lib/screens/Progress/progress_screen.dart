@@ -12,9 +12,6 @@ class ProgressScreen extends StatelessWidget {
     final ProgressService progressService = ProgressService();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Progress'),
-      ),
       body: FutureBuilder<List<WorkoutProgress>>(
         future: progressService.getUserProgress(userId),
         builder: (context, snapshot) {
