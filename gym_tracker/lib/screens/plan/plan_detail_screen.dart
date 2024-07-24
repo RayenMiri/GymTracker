@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gym_tracker/models/exercise.dart';
 import 'package:gym_tracker/models/plan.dart';
+import 'package:gym_tracker/screens/Exercise/exercise_screen.dart';
 import 'package:gym_tracker/widgets/exercise_card.dart';
 import 'package:gym_tracker/services/plan_service.dart';
 
@@ -20,7 +21,13 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _exercises = _planService.getExercisesForPlan(widget.plan.id);
+    _load_exercises();
+  }
+
+  void _load_exercises() {
+    setState(() {
+      _exercises = _planService.getExercisesForPlan(widget.plan.id);
+    });
   }
 
   @override
@@ -81,7 +88,25 @@ class _PlanDetailScreenState extends State<PlanDetailScreen> {
                     itemCount: exercises.length,
                     itemBuilder: (context, index) {
                       final exercise = exercises[index];
-                      return ExerciseCard(exercise: exercise);
+                      return ExerciseCard(
+                        exercise: exercise,
+                        planId: widget.plan.id,
+                        onTap: () async {
+                          final updatedExercise = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseScreen(
+                                exercise: exercise,
+                                planId: widget.plan.id,
+                              ),
+                            ),
+                          );
+
+                          if (updatedExercise != null) {
+                            _load_exercises(); // Refresh the exercises list
+                          }
+                        },
+                      );
                     },
                   );
                 },

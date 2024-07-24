@@ -15,7 +15,7 @@ class _PlanScreenState extends State<PlanScreen> {
   late AuthService _authService;
   late SharedPreferences _prefs;
   late String _token;
-  User? _user; // Change this to nullable
+  User? _user;
 
   @override
   void initState() {

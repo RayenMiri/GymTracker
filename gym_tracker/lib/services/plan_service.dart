@@ -55,6 +55,17 @@ class PlanService {
     });
   }
 
+  //update plan's exericise
+  Future<int> updatePlanExercise(int planId, Exercise exercice) async {
+    final db = await _databaseService.database;
+    return await db.update(
+      'exercises',
+      {'sets': exercice.sets, 'reps': exercice.reps, 'weight': exercice.weight},
+      where: 'planId=? AND exerciseName=?',
+      whereArgs: [planId, exercice.name],
+    );
+  }
+
   //update plan
   Future<int> updatePlan(int id, String planName, String description) async {
     final db = await _databaseService.database;

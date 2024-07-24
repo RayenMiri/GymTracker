@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:gym_tracker/models/exercise.dart';
 import 'package:gym_tracker/screens/Exercise/exercise_screen.dart';
-import '../models/plan.dart';
-import '../models/exercise.dart';
 
 class ExerciseCard extends StatelessWidget {
   final Exercise exercise;
+  final int planId;
+  final Function onTap;
 
-  const ExerciseCard({Key? key, required this.exercise}) : super(key: key);
+  const ExerciseCard({
+    Key? key,
+    required this.exercise,
+    required this.planId,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ExerciseScreen(exercise: exercise)))
-      },
+      onTap: () => onTap(),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -47,10 +48,6 @@ class ExerciseCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Weight:${exercise.weight}',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Text(
                     'Sets: ${exercise.sets}',
                     style: TextStyle(
                       fontSize: 16,
@@ -63,15 +60,20 @@ class ExerciseCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Weight:${exercise.weight}',
+                    'Weight: ${exercise.weight}',
                     style: TextStyle(fontSize: 16),
                   ),
                 ],
               ),
               SizedBox(height: 8),
-              // Add an image or icon if you want to make it more visually appealing
-              // For example, you can use the following code to add an image
-              // Image.asset('assets/images/exercise.png', height: 100),
+              Row(
+                children: [
+                  Expanded(
+                    child: Image.asset(
+                        "assets/img/${exercise.name.replaceAll(" ", "")}.png"),
+                  ),
+                ],
+              )
             ],
           ),
         ),
